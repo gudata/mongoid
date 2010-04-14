@@ -11,13 +11,16 @@ describe Mongoid::Associations do
   context "anonymous extensions" do
 
     before do
+      @some_model = SomeModel.create(:id => "4")
       @person = Person.new(:title => "Dr")
       @address_one = Address.new(:street => "Oxford")
       @address_two = Address.new(:street => "Bond")
       @name = Name.new(:first_name => "Richard", :last_name => "Dawkins")
       @person.addresses << [ @address_one, @address_two ]
+      @person.some_model_id = @some_model.id
       @person.name = @name
       @person.save
+
     end
 
     context "when defined on a has_many" do
@@ -45,6 +48,12 @@ describe Mongoid::Associations do
         @address_two.addressable.doctor?.should be_true
       end
 
+      it "should find by the type we want" do
+	    person = Person.find(@person.id)
+        person.some_model_id.should be_kind_of(Fixnum)
+	    person.some_model_id  = "3"
+        person.some_model_id.should be_kind_of(Fixnum)
+      end
     end
 
   end

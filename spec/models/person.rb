@@ -38,6 +38,8 @@ class Person
 
   attr_reader :rescored
 
+  belongs_to_related :some_model, :key_type => Integer
+ 
   has_many :addresses do
     def extension
       "Testing"

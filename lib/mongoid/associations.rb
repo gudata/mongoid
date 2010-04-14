@@ -93,7 +93,8 @@ module Mongoid # :nodoc:
             options.merge(:name => name, :extend => block, :foreign_key => foreign_key(name, options))
           )
         add_association(Associations::BelongsToRelated, opts)
-        field(opts.foreign_key, :type => Mongoid.use_object_ids ? Mongo::ObjectID : String)
+	key_type = options.key?(:key_type) ? options[:key_type] : String
+        field(opts.foreign_key, :type => Mongoid.use_object_ids ? Mongo::ObjectID : key_type)
         index(opts.foreign_key) unless self.embedded
       end
 
